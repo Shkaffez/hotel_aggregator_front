@@ -1,0 +1,7 @@
+export const ADMIN_ROUTE = '/admin'
+export const LOGIN_ROUTE = '/login'
+export const REGISTRATION_ROUTE = '/registration'
+export const HOTEL_ROUTE = '/hotel'
+export const ROOM_ROUTE = '/room'
+export const USER_ROUTE = '/user'
+export const MAIN_ROUTE = '/main'
