@@ -4,6 +4,7 @@ import { UserPage } from './pages/UserPage';
 import { Hotel } from './pages/Hotel';
 import { MainPage } from './pages/MainPage';
 import { Auth } from './pages/Auth';
+import { Login } from './pages/Login';
 
 
 export const authRoutes = [
@@ -24,7 +25,7 @@ export const publicRoutes = [
     },
     {
         path: LOGIN_ROUTE,
-        Component: Auth
+        Component: Login
     },
     {
         path: REGISTRATION_ROUTE,
