@@ -4,19 +4,19 @@ import { MainPage } from "../pages/MainPage";
 import { authRoutes, publicRoutes } from "../routes";
 
 export const AppRouter = (props) => {
-    const idAuth = false
+	const idAuth = false
 
-    return (
-        <Routes>
-            {idAuth && authRoutes.map(({ path, Component }) =>
-                <Route key={path} path={path} element={<Component />} />
-            )}
+	return (
+		<Routes>
+			{idAuth && authRoutes.map(({ path, Component }) =>
+				<Route key={path} path={path} element={<Component />} />
+			)}
 
-            {publicRoutes.map(({ path, Component }) =>
-                <Route key={path} path={path} element={<Component />} />
-            )}
+			{publicRoutes.map(({ path, Component }) =>
+				<Route key={path} path={path} element={<Component />} />
+			)}
 
-            <Route path="*" element={<MainPage />} />
-        </Routes>
-    )
+			<Route path="*" element={<MainPage />} />
+		</Routes>
+	)
 };
