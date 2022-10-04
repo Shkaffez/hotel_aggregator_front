@@ -1,14 +1,23 @@
+import { useContext, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Button, Card, Form } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useInput } from '../hooks/useInput';
 import { registretion } from '../http/userAPI';
+import { Context } from '../index';
+import { MAIN_ROUTE } from "../utils/consts";
+import { observer } from 'mobx-react-lite';
 
-export const Auth = (props) => {
+export const Auth = observer((props) => {
+
+	const { user } = useContext(Context);
+	const navigate = useNavigate();
 
 	const email = useInput('', { isEmpty: true, isEmail: false });
 	const password = useInput('', { isEmpty: true, minLength: 6, maxLength: 12 });
 	const name = useInput('', { isEmpty: true, maxLength: 30 });
 	const phone = useInput('', { isEmpty: true, maxLength: 30 });
+	const [submitError, setSubmitError] = useState('');
 
 	const hasErrors = email.errors.some(el => Boolean(el)) || password.errors.some(el => Boolean(el)) ||
 		name.errors.some(el => Boolean(el)) || phone.errors.some(el => Boolean(el));
@@ -23,12 +32,27 @@ export const Auth = (props) => {
 		name.setDirty(false);
 		phone.setValue('');
 		phone.setDirty(false);
+		setSubmitError('');
 	}
 
 	const submit = async (e) => {
 		e.preventDefault();
-		const data = await registretion(email.value, password.value, name.value, phone.value)
-		console.log(data)
+		try {
+			const data = await registretion(email.value, password.value, name.value, phone.value);
+
+			user.setUser({
+				name: data.name,
+				email: data.email,
+				_id: data._id,
+				role: data.role
+			});
+			user.setIsAuth(true);
+
+			navigate(MAIN_ROUTE);
+		} catch (error) {
+			setSubmitError(error.response.data.message);
+		}
+
 	}
 
 	return (
@@ -102,7 +126,8 @@ export const Auth = (props) => {
 						</Button>
 					</div>
 				</Form>
+				<div className="m-auto" style={{ color: 'red' }} >{submitError}</div>
 			</Card>
 		</Container >
 	)
-};
+});

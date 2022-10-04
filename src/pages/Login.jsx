@@ -1,12 +1,20 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Context } from '../index';
+import { useContext, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { useInput } from '../hooks/useInput';
+import { observer } from 'mobx-react-lite';
+import { login } from '../http/userAPI';
+import { MAIN_ROUTE } from "../utils/consts";
 
-export const Login = () => {
-
+export const Login = observer(() => {
+	const navigate = useNavigate();
+	const { user } = useContext(Context);
 	const email = useInput('', { isEmpty: true, isEmail: false });
 	const password = useInput('', { isEmpty: true, minLength: 6, maxLength: 12 });
+	const [submitError, setSubmitError] = useState('');
 
 	const hasErrors = email.errors.some(el => Boolean(el)) || password.errors.some(el => Boolean(el));
 
@@ -17,7 +25,29 @@ export const Login = () => {
 		email.setDirty(false);
 		password.setValue('');
 		password.setDirty(false);
+		setSubmitError('');
 	}
+
+	const submit = async (e) => {
+		e.preventDefault();
+		try {
+			const data = await login(email.value, password.value);
+			console.log(data);
+			user.setUser({
+				name: data.name,
+				email: data.email,
+				_id: data._id,
+				role: data.role
+			});
+			user.setIsAuth(true);
+
+			navigate(MAIN_ROUTE);
+		} catch (error) {
+			setSubmitError(error.response.data.message);
+		}
+
+	}
+
 
 	return (
 		<Container className="d-flex justify-content-center align-items-center"
@@ -53,7 +83,7 @@ export const Login = () => {
 					</Form.Group>
 
 					<div className="d-flex justify-content-around">
-						<Button disabled={hasErrors} variant="primary" type="submit">
+						<Button disabled={hasErrors} onClick={submit} variant="primary" type="submit">
 							Submit
 						</Button>
 						<Button onClick={refresh} variant="secondary" type="submit">
@@ -61,8 +91,9 @@ export const Login = () => {
 						</Button>
 					</div>
 				</Form>
+				<div className="m-auto" style={{ color: 'red' }} >{submitError}</div>
 			</Card>
 		</Container >
 	);
-}
+});
 
