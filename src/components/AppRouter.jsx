@@ -1,14 +1,16 @@
-import React from "react";
+import { observer } from "mobx-react-lite";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
+import { Context } from "..";
 import { MainPage } from "../pages/MainPage";
 import { authRoutes, publicRoutes } from "../routes";
 
-export const AppRouter = (props) => {
-	const idAuth = false
+export const AppRouter = observer((props) => {
+	const { user } = useContext(Context);
 
 	return (
 		<Routes>
-			{idAuth && authRoutes.map(({ path, Component }) =>
+			{user.user.role == 'admin' && authRoutes.map(({ path, Component }) =>
 				<Route key={path} path={path} element={<Component />} />
 			)}
 
@@ -19,4 +21,4 @@ export const AppRouter = (props) => {
 			<Route path="*" element={<MainPage />} />
 		</Routes>
 	)
-};
+});

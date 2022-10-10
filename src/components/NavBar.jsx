@@ -27,6 +27,7 @@ export const NavBar = (props) => {
                     }
                     {user.isAuth &&
                         <Button
+                            className="ms-3"
                             // дописать ф-ию для логаута
                             // onClick={() => navigate(REGISTRATION_ROUTE)}
                             variant={"outline-dark"}

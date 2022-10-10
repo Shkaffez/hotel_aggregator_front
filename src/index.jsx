@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import UserStore from './store/UserStore';
+import HotelStore from './store/HotelStore';
 
 export const Context = createContext(null);
 
@@ -12,7 +13,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Context.Provider value={{
-    user: new UserStore()
+    user: new UserStore(),
+    hotels: new HotelStore()
   }}>
     <App />
   </Context.Provider>

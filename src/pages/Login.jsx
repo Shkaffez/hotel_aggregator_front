@@ -32,7 +32,6 @@ export const Login = observer(() => {
 		e.preventDefault();
 		try {
 			const data = await login(email.value, password.value);
-			console.log(data);
 			user.setUser({
 				name: data.name,
 				email: data.email,
@@ -43,6 +42,7 @@ export const Login = observer(() => {
 
 			navigate(MAIN_ROUTE);
 		} catch (error) {
+			setSubmitError(error.message);
 			setSubmitError(error.response.data.message);
 		}
 
