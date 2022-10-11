@@ -4,27 +4,23 @@ import { Button, FloatingLabel, Form } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import PreviewPhoto from "../components/PreviewPhoto";
 
 export const Admin = observer((props) => {
-  const wrapperRef = useRef(null)
+  // const wrapperRef = useRef(null);
+
 
   const loadFile = (e) => {
     for (let i = 0; i < e.target.files.length; i++) {
       let url = URL.createObjectURL(e.target.files[i]);
-      let img = new Image();
-      img.src = url;
-      img.width = 100
-      wrapperRef.current.appendChild(img);
+      setPreviews(previews => [...previews, url])
       setImages(e.target.files)
-      img.onload = function () {
-        URL.revokeObjectURL(this.src);
-      }
     }
   }
-
   const title = useInput('', { isEmpty: true, maxLength: 50 });
   const description = useInput('', { isEmpty: true, maxLength: 250 });
   const [images, setImages] = useState([]);
+  const [previews, setPreviews] = useState([]);
   const [submitError, setSubmitError] = useState('');
 
   const hasErrors = title.errors.some(el => Boolean(el)) || description.errors.some(el => Boolean(el));
@@ -36,6 +32,10 @@ export const Admin = observer((props) => {
     description.setValue('');
     description.setDirty(false);
     setImages([]);
+    setPreviews([]);
+
+    // wrapperRef.innerHTML = '';
+
     setSubmitError('');
   }
 
@@ -96,7 +96,8 @@ export const Admin = observer((props) => {
             onChange={e => loadFile(e)}
           />
         </Form.Group>
-        <div ref={wrapperRef}></div>
+        {/* <div ref={wrapperRef}></div> */}
+        <PreviewPhoto previews={previews} />
         <div className="d-flex justify-content-around">
           <Button disabled={hasErrors} onClick={submit} variant="primary" type="submit">
             Submit

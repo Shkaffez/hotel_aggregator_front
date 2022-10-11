@@ -9,7 +9,6 @@ export const MainPage = observer((props) => {
     const { user } = useContext(Context);
     useEffect(() => {
         searchHotels().then(data => {
-            console.log(data);
         })
     }, [])
 
