@@ -4,7 +4,7 @@ const PreviewPhoto = ({ previews }) => {
   return (
     <div>
       {previews.map(preview =>
-        <img src={preview} width='100px' key={preview}></img>
+        <img className="me-2" src={preview} width='100px' key={preview}></img>
       )}
     </div>
   );
