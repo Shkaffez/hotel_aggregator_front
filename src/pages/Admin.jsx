@@ -4,14 +4,19 @@ import Container from "react-bootstrap/Container";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import PreviewPhoto from "../components/PreviewPhoto";
+import { addNewHotel } from "../http/hotelAPI";
+import { useContext } from 'react';
+import { Context } from '../index';
 
 export const Admin = observer((props) => {
 
+  const { hotels } = useContext(Context);
+
   const loadFile = (e) => {
+    setImages([...e.target.files])
     for (let i = 0; i < e.target.files.length; i++) {
       let url = URL.createObjectURL(e.target.files[i]);
       setPreviews(previews => [...previews, url])
-      setImages(e.target.files)
     }
   }
   const city = useInput('', { isEmpty: true, maxLength: 50 });
@@ -28,6 +33,8 @@ export const Admin = observer((props) => {
 
   const refresh = (e) => {
     e.preventDefault();
+    city.setValue('');
+    city.setDirty(false);
     title.setValue('');
     title.setDirty(false);
     description.setValue('');
@@ -40,7 +47,27 @@ export const Admin = observer((props) => {
 
   const submit = async (e) => {
     e.preventDefault();
-    console.log(title, description, images)
+    try {
+      const formData = new FormData();
+      formData.append('city', city.value);
+      formData.append('title', title.value);
+      formData.append('description', description.value);
+      formData.append('file', images)
+      // for (let file of images) {
+      //   formData.append('file', file);
+      // };
+      const data = await addNewHotel(formData);
+      console.log(data)
+      hotels.setHotels([...hotels.hotels, data]);
+      console.log(hotels.hotels[0].city)
+      console.log(hotels.hotels[0].title)
+      console.log(hotels.hotels[0].description)
+      console.log(hotels.hotels[0].images)
+    } catch (error) {
+      console.log(error)
+      setSubmitError(error.message);
+      setSubmitError(error.response.data.message);
+    }
 
   }
 
@@ -48,18 +75,16 @@ export const Admin = observer((props) => {
     <Container>
       <h2>Добавить отель</h2>
       <Form>
-        {(title.isDirty && title.errors.some(el => Boolean(el))) && <div style={{ color: 'red' }}>
-          {title.errors.filter(el => Boolean(el))}
+        {(city.isDirty && city.errors.some(el => Boolean(el))) && <div style={{ color: 'red' }}>
+          {city.errors.filter(el => Boolean(el))}
         </div>}
-
         <FloatingLabel
           controlId="city"
           label="Город"
           className="mb-3"
-
         >
           <Form.Control
-            placeholder="город"
+            placeholder="Город"
             type="text"
             value={city.value}
             onChange={e => city.onChange(e)}
@@ -67,14 +92,16 @@ export const Admin = observer((props) => {
           />
         </FloatingLabel>
 
+        {(title.isDirty && title.errors.some(el => Boolean(el))) && <div style={{ color: 'red' }}>
+          {title.errors.filter(el => Boolean(el))}
+        </div>}
         <FloatingLabel
           controlId="title"
           label="Название"
           className="mb-3"
-
         >
           <Form.Control
-            placeholder="введите название"
+            placeholder="Название"
             type="text"
             value={title.value}
             onChange={e => title.onChange(e)}
@@ -92,7 +119,7 @@ export const Admin = observer((props) => {
         >
           <Form.Control
             as="textarea"
-            placeholder="введите название"
+            placeholder="Описание"
             type="text"
             style={{ height: '100px' }}
             value={description.value}
@@ -112,7 +139,9 @@ export const Admin = observer((props) => {
             key={inputFileKey}
           />
         </Form.Group>
+
         <PreviewPhoto previews={previews} />
+
         <div className="d-flex justify-content-around">
           <Button disabled={hasErrors} onClick={submit} variant="primary" type="submit">
             Submit
@@ -122,6 +151,7 @@ export const Admin = observer((props) => {
           </Button>
         </div>
       </Form>
+      <div className="m-auto" style={{ color: 'red' }} >{submitError}</div>
     </Container>
   )
 });
