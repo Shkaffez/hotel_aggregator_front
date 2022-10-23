@@ -52,10 +52,9 @@ export const Admin = observer((props) => {
       formData.append('city', city.value);
       formData.append('title', title.value);
       formData.append('description', description.value);
-      formData.append('file', images)
-      // for (let file of images) {
-      //   formData.append('file', file);
-      // };
+      for (let file of images) {
+        formData.append('files', file);
+      };
       const data = await addNewHotel(formData);
       console.log(data)
       hotels.setHotels([...hotels.hotels, data]);
@@ -68,7 +67,6 @@ export const Admin = observer((props) => {
       setSubmitError(error.message);
       setSubmitError(error.response.data.message);
     }
-
   }
 
   return (
@@ -140,8 +138,6 @@ export const Admin = observer((props) => {
           />
         </Form.Group>
 
-        <PreviewPhoto previews={previews} />
-
         <div className="d-flex justify-content-around">
           <Button disabled={hasErrors} onClick={submit} variant="primary" type="submit">
             Submit
@@ -150,6 +146,9 @@ export const Admin = observer((props) => {
             Refresh
           </Button>
         </div>
+
+        <PreviewPhoto previews={previews} />
+
       </Form>
       <div className="m-auto" style={{ color: 'red' }} >{submitError}</div>
     </Container>
