@@ -1,9 +1,15 @@
 import React from 'react';
 
-const HotelItem = () => {
+const HotelItem = ({ hotel }) => {
   return (
     <div>
-      HOTEL ITEM
+      <h2>{hotel.title}</h2>
+      <p>{hotel.city}</p>
+      <p>{hotel.description}</p>
+      {
+        hotel.images.map(image =>
+          <img src={ }></img>
+      }
     </div>
   );
 }
