@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const HotelItem = ({ hotel }) => {
   return (
     <div>
@@ -8,8 +9,8 @@ const HotelItem = ({ hotel }) => {
       <p>{hotel.description}</p>
       {
         hotel.images.map(image =>
-          <img src={ }></img>
-      }
+          <img src={process.env.REACT_APP_API_URL + "/files/" + image} key={image} alt="view of hotel"></img>
+        )}
     </div>
   );
 }

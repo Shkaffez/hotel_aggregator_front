@@ -9,20 +9,21 @@ import { Context } from ".";
 import { check } from "./http/userAPI";
 
 const App = observer(() => {
-  const { user } = useContext(Context);
+  const { userStore } = useContext(Context);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     check().then(data => {
       if (data.email) {
-        user.setUser({
+        userStore.setUser({
           name: data.name,
           email: data.email,
           _id: data._id,
           role: data.role
         });
-        user.setIsAuth(true);
+        userStore.setIsAuth(true);
       }
     }).finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {

@@ -10,7 +10,7 @@ import { Context } from '../index';
 
 export const Admin = observer((props) => {
 
-  const { hotels } = useContext(Context);
+  const { hotelsStore } = useContext(Context);
 
   const loadFile = (e) => {
     setImages([...e.target.files])
@@ -56,12 +56,11 @@ export const Admin = observer((props) => {
         formData.append('files', file);
       };
       const data = await addNewHotel(formData);
-      console.log(data)
-      hotels.setHotels([...hotels.hotels, data]);
-      console.log(hotels.hotels[0].city)
-      console.log(hotels.hotels[0].title)
-      console.log(hotels.hotels[0].description)
-      console.log(hotels.hotels[0].images)
+      hotelsStore.setHotels([...hotelsStore.hotels, data]);
+      console.log(hotelsStore.hotels[0].city)
+      console.log(hotelsStore.hotels[0].title)
+      console.log(hotelsStore.hotels[0].description)
+      console.log(hotelsStore.hotels[0].images)
     } catch (error) {
       console.log(error)
       setSubmitError(error.message);

@@ -4,22 +4,22 @@ import { observer } from 'mobx-react-lite';
 import Container from "react-bootstrap/Container";
 import { useEffect } from "react";
 import { searchHotels } from "../http/hotelAPI";
+import HotelsList from "../components/HotelsList";
 
-export const MainPage = observer((props) => {
-    const { user } = useContext(Context);
-    const { hotels } = useContext(Context);
-    // useEffect(() => {
-    //     searchHotels().then(data => {
-    //     })
-    // }, [])
+export const MainPage = observer(() => {
+    const { hotelsStore } = useContext(Context);
+    useEffect(() => {
+        searchHotels().then(data => {
+            console.log("from main page", data)
+            hotelsStore.setHotels(data);
+        })
+    }, [])
 
+    console.log(hotelsStore.hotels)
     return (
         <Container>
             <h1>Main</h1>
-            <div>{`имя: ${user.user.name}`}</div>
-            <div>{`email: ${user.user.email}`}</div>
-            <div>{`id: ${user.user._id}`}</div>
-            <div>{`роль: ${user.user.role}`}</div>
+            {hotelsStore.hotels && <HotelsList hotels={hotelsStore.hotels} />}
 
         </Container>
     )

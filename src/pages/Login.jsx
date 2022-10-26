@@ -11,7 +11,7 @@ import { MAIN_ROUTE } from "../utils/consts";
 
 export const Login = observer(() => {
 	const navigate = useNavigate();
-	const { user } = useContext(Context);
+	const { userStore } = useContext(Context);
 	const email = useInput('', { isEmpty: true, isEmail: false });
 	const password = useInput('', { isEmpty: true, minLength: 6, maxLength: 12 });
 	const [submitError, setSubmitError] = useState('');
@@ -32,13 +32,13 @@ export const Login = observer(() => {
 		e.preventDefault();
 		try {
 			const data = await login(email.value, password.value);
-			user.setUser({
+			userStore.setUser({
 				name: data.name,
 				email: data.email,
 				_id: data._id,
 				role: data.role
 			});
-			user.setIsAuth(true);
+			userStore.setIsAuth(true);
 
 			navigate(MAIN_ROUTE);
 		} catch (error) {

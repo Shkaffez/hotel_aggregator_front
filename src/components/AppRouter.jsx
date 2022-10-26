@@ -6,11 +6,11 @@ import { MainPage } from "../pages/MainPage";
 import { authRoutes, publicRoutes } from "../routes";
 
 export const AppRouter = observer((props) => {
-	const { user } = useContext(Context);
+	const { userStore } = useContext(Context);
 
 	return (
 		<Routes>
-			{user.user.role == 'admin' && authRoutes.map(({ path, Component }) =>
+			{userStore.user.role === 'admin' && authRoutes.map(({ path, Component }) =>
 				<Route key={path} path={path} element={<Component />} />
 			)}
 

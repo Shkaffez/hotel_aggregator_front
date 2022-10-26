@@ -13,8 +13,8 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Context.Provider value={{
-    user: new UserStore(),
-    hotels: new HotelStore()
+    userStore: new UserStore(),
+    hotelsStore: new HotelStore()
   }}>
     <App />
   </Context.Provider>

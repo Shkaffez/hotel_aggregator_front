@@ -10,14 +10,14 @@ import { Context } from '../index';
 
 
 export const NavBar = (props) => {
-    const { user } = useContext(Context)
+    const { userStore } = useContext(Context)
     const navigate = useNavigate();
     return (
         <Navbar bg="primary" variant="light">
             <Container>
                 <NavLink style={{ color: 'white' }} to={MAIN_ROUTE}>Агрегатор отелей</NavLink>
                 <Nav className="ms-auto">
-                    {user.isAuth && user.user.role === 'admin' &&
+                    {userStore.isAuth && userStore.user.role === 'admin' &&
                         <Button
                             onClick={() => navigate(ADMIN_ROUTE)}
                             variant={"outline-dark"}
@@ -25,7 +25,7 @@ export const NavBar = (props) => {
                             Админ панель
                         </Button>
                     }
-                    {user.isAuth &&
+                    {userStore.isAuth &&
                         <Button
                             className="ms-3"
                             // дописать ф-ию для логаута
@@ -36,7 +36,7 @@ export const NavBar = (props) => {
                         </Button>
                     }
 
-                    {!user.isAuth &&
+                    {!userStore.isAuth &&
                         <>
                             <Button
                                 onClick={() => navigate(REGISTRATION_ROUTE)}

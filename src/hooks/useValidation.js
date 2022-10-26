@@ -24,6 +24,7 @@ export const useValidation = (value, validations) => {
                     break;                
 
                 case 'isEmail':
+                    //eslint-disable-next-line
                     const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
                     re.test(String(value).toLowerCase()) ? setEmailError(false) : setEmailError('Не корректный email\n')
                     break;
@@ -32,7 +33,7 @@ export const useValidation = (value, validations) => {
                     break;
             }
         }
-    }, [value]);   
+    }, [value, validations]);   
 
     const errors = [isEmpty, minLengthError, maxLengthError, emailError];
 

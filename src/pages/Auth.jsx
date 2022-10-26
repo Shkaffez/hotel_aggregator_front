@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite';
 
 export const Auth = observer((props) => {
 
-	const { user } = useContext(Context);
+	const { userStore } = useContext(Context);
 	const navigate = useNavigate();
 
 	const email = useInput('', { isEmpty: true, isEmail: false });
@@ -40,13 +40,13 @@ export const Auth = observer((props) => {
 		try {
 			const data = await registretion(email.value, password.value, name.value, phone.value);
 
-			user.setUser({
+			userStore.setUser({
 				name: data.name,
 				email: data.email,
 				_id: data._id,
 				role: data.role
 			});
-			user.setIsAuth(true);
+			userStore.setIsAuth(true);
 
 			navigate(MAIN_ROUTE);
 		} catch (error) {

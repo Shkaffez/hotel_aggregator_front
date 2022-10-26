@@ -1,15 +1,13 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useContext } from 'react';
-import { Context } from '..';
 import { Row } from 'react-bootstrap';
+import HotelItem from './HotelItem';
 
-const HotelsList = observer(() => {
-  const { hotels } = useContext(Context);
-
+const HotelsList = observer(({ hotels }) => {
+  console.log("from hotelsList", hotels)
   return (
     <Row className="d-flex">
-      {hotels.hotels.map(hotel =>
+      {hotels.map(hotel =>
         <HotelItem key={hotel._id} hotel={hotel} />
       )}
     </Row>
